@@ -1,0 +1,104 @@
+/* App.css */
+
+body {
+  background-color: black;
+  color: white; /* Set text color to white for better readability on black background */
+}
+
+.name-input,
+.description-textarea {
+  background-color: white;
+  color: black; /* Set text color to black for better readability on white background */
+}
+
+.navbar-brand {
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icon {
+  margin-right: 10px;
+}
+
+.profile-container {
+  margin-top: 20px;
+}
+
+.profile-pic {
+  width: 100px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.name-input,
+.description-textarea {
+  margin-top: 10px;
+}
+
+.save-btn,
+.cancel-btn
+{
+  color: white;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.name-display .edit-icon,
+.description-display .edit-icon {
+  margin-left: 13px; /* Adjust the space between the text and the edit icon as needed */
+}
+
+.name-display {
+  font-size: 3em; /* Increase the font size of the name */
+  align-items: center; /* Ensure vertical alignment */
+  display: flex;
+}
+
+.description-display {
+  font-size: 1.5em; /* Increase the font size of the description */
+  align-items: center; /* Ensure vertical alignment */
+  display: flex;
+}
+
+.edit-icon {
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+/* App.css */
+.profile-container {
+  display: flex;
+  align-items: center; /* This will vertically center your items */
+  justify-content: start; /* This aligns items to the start of the container */
+  margin-top: 20px;
+  gap: 20px; /* Adds space between the image and text */
+}
+
+.profile-pic {
+  /* Adjust width and height to fit a portrait rectangle */
+  width: auto; /* Adjust this value as needed */
+  height: 70%; /* Adjust this value as needed */
+  flex: 0 0 40%; /* Adjust the flex-basis if needed */
+  max-width: 40%; /* Adjust this value to maintain aspect ratio if needed */
+  border-radius: 10px; /* This will give the image rounded corners */
+  object-fit: cover; /* This will cover the area without stretching the image */
+}
+
+.profile-details {
+  flex: 0 0 60%; /* This will make sure the name and description takes up the remaining 60% */
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: black;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: black;
+}
