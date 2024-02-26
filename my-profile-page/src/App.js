@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <Navbar bg="light" expand="lg">
+      <Navbar bg="dark" expand="lg">
         <Navbar.Brand className="navbar-brand">
           <Link to="/">
             <img src={navbarIcon} alt="Icon" width='50px' style={{ margin: '10px' }} />
