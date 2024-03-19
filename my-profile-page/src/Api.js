@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const ThirdPartyApi = () => {
+const Api = () => {
   const [query, setQuery] = useState('');
   const [pokemonData, setPokemonData] = useState(null);
   const [error, setError] = useState(null);
@@ -45,4 +45,4 @@ const ThirdPartyApi = () => {
   );
 };
 
-export default ThirdPartyApi;
+export default Api;

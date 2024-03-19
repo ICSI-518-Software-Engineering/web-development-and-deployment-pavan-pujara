@@ -1,11 +1,13 @@
 import "./App.css";
 import React, { useState } from "react";
 import { Container, Navbar, Nav, Image, Button, FormControl } from "react-bootstrap";
-import { Link, Route, Routes } from "react-router-dom"; // Remove 'BrowserRouter as Router', 'Switch'
+import { Link, Route, Routes } from "react-router-dom"; 
 import "bootstrap/dist/css/bootstrap.min.css";
-import profilePic from "./pp.jpg"; // Ensure this path is correct
-import navbarIcon from "./pp.png"; // Ensure this path is correct
-import AdditionPage from "./Addition.js"; // Ensure this path is correct
+import profilePic from "./pp.jpg"; 
+import navbarIcon from "./pp.png"; 
+import AdditionPage from "./Addition.js"; 
+import Api from './Api';
+import Inventory from './Inventory';
 
 function App() {
   const [isEditing, setIsEditing] = useState(false);
@@ -41,6 +43,8 @@ function App() {
         <Nav className="mr-auto" style={{ marginRight: '10px' }}>
           <Link to="/" className="nav-link">Profile</Link>
           <Link to="/addition" className="nav-link">Addition</Link>
+          <Link to="/Api" className="nav-link">API</Link>
+          <Link to="/inventory" className="nav-link">Inventory</Link>
         </Nav>
       </Navbar>
 
