@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div>
-      <Navbar bg="dark" expand="lg">
+      <Navbar bg="light" expand="lg">
         <Navbar.Brand className="navbar-brand">
           <Link to="/">
             <img src={navbarIcon} alt="Icon" width='50px' style={{ margin: '10px' }} />
@@ -43,7 +43,7 @@ function App() {
         <Nav className="mr-auto" style={{ marginRight: '10px' }}>
           <Link to="/" className="nav-link">Profile</Link>
           <Link to="/addition" className="nav-link">Addition</Link>
-          <Link to="/Api" className="nav-link">API</Link>
+          <Link to="/api" className="nav-link">API</Link>
           <Link to="/inventory" className="nav-link">Inventory</Link>
         </Nav>
       </Navbar>
@@ -104,6 +104,7 @@ function App() {
           </Container>
         }/>
         <Route path="/addition" element={<AdditionPage />} />
+        <Route path="/api" element={<Api />} />
       </Routes>
     </div>
   );
