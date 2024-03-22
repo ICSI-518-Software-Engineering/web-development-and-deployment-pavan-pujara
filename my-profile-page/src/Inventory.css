@@ -29,7 +29,42 @@ h1 {
 }
 
 .form-control::placeholder { /* Style the placeholder text */
+  color: grey;
+}
+
+.os {
+  cursor: pointer;
+  background-color: white;
   color: black;
+  height: 50px;
+  width: 140px;
+  margin-left: 10px;
+  padding: 10px;
+  font-size: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
+}
+
+select.os {
+  -webkit-appearance: none; /* Removes default chrome and safari style */
+  -moz-appearance: none; /* Removes default style Firefox */
+  appearance: none; /* Removes default style */
+  background: url('./path-to-down-arrow-icon.png') no-repeat right; /* Add custom arrow icon */
+  background-size: 25px; /* Size of the background image */
+  cursor: pointer;
+  font-size: 18px;
+  background-color: white;
+  color: black;
+  height: 49px;
+  width: 150px;
+  margin-left: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
+}
+
+/* Update the background position to leave some space on the right */
+select.os {
+  background-position: right 10px center;
+
 }
 
 .btn_search {

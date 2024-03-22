@@ -5,7 +5,8 @@ import './Inventory.css'; // Make sure to create appropriate CSS
 const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [inventoryItems, setInventoryItems] = useState([]);
-  const [editingItem, setEditingItem] = useState(null); // holds the item currently being edited
+  // Expanded editingItem state to include model and os
+  const [editingItem, setEditingItem] = useState({ name: '', model: '', os: '', image: '' });
 
   useEffect(() => {
     fetchInventoryItems();
@@ -21,16 +22,19 @@ const Inventory = () => {
   };
 
   const handleItemSubmit = async (event) => {
-    event.preventDefault(); // Prevents the default form submission behavior
-    if (editingItem) {
-      // If editingItem exists, update the item
-      await axios.put(`/api/inventory/${editingItem._id}`, editingItem);
+    event.preventDefault();
+    const itemToSubmit = {
+      ...editingItem,
+      // Ensure that we're sending the os as lowercase to the backend
+      os: editingItem.os.toLowerCase()
+    };
+    if (editingItem._id) {
+      await axios.put(`/api/inventory/${editingItem._id}`, itemToSubmit);
     } else {
-      // If editingItem doesn't exist, create a new item
-      await axios.post('/api/inventory', editingItem);
+      await axios.post('/api/inventory', itemToSubmit);
     }
-    setEditingItem(null); // Reset editingItem state
-    fetchInventoryItems(); // Refresh the list
+    setEditingItem({ name: '', model: '', os: '', image: '' }); // Reset editingItem state
+    fetchInventoryItems();
   };
 
   const handleInputChange = (event) => {
@@ -44,61 +48,75 @@ const Inventory = () => {
 
   const handleDeleteItem = async (id) => {
     await axios.delete(`/api/inventory/${id}`);
-    fetchInventoryItems(); // Refresh the list
+    fetchInventoryItems();
   };
 
   return (
     <div className="container">
       <h1>Inventory</h1>
-      {/* Search bar to filter items */}
       <div className="search-bar">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by name..."
+          placeholder="Search by device name..."
           className="form-control"
         />
         <button className="btn_search" onClick={fetchInventoryItems}>Search</button>
       </div>
-      {/* Form to add/edit items */}
       <form onSubmit={handleItemSubmit}>
-        <input
+        <input className='os'
           type="text"
           name="name"
-          placeholder="Item name"
-          value={editingItem?.name || ''}
+          placeholder="Device name"
+          value={editingItem.name}
           onChange={handleInputChange}
           required
         />
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          value={editingItem?.quantity || ''}
+        <input className='os'
+          type="text"
+          name="model"
+          placeholder="Model"
+          value={editingItem.model}
           onChange={handleInputChange}
           required
         />
+        {/* Dropdown menu for OS selection */}
+        <select className='os'
+          name="os"
+          value={editingItem.os}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select OS</option>
+          <option value="none">None</option>
+          <option value="android">Android</option>
+          <option value="ios">iOS</option>
+        </select>
+        {/* Image upload input will go here if needed */}
         <button type="submit" className="btn_add">
-          {editingItem ? 'Save Changes' : 'Add Item'}
+          {editingItem._id ? 'Save Changes' : 'Add Device'}
         </button>
       </form>
-      {/* Inventory items list */}
       <div className="inventory-list">
-        {inventoryItems.length === 0 && <p>Inventory is empty</p>}
-        {inventoryItems.map((item) => (
-          <div key={item._id} className="card">
-            <img src={item.image} alt={item.name} />
-            <div className="card-body">
-              <h3 className="card-title">{item.name}</h3>
-              <p>Quantity: {item.quantity}</p>
-              <div className="button-container">
-                <button className="btn btn-orange" onClick={() => handleEditItem(item)}>Edit</button>
-                <button className="btn btn-red" onClick={() => handleDeleteItem(item._id)}>Delete</button>
+        {inventoryItems.length === 0 ? (
+          <p>Inventory is empty</p>
+        ) : (
+          inventoryItems.map((item) => (
+            <div key={item._id} className="card">
+              <img src={item.image || '/placeholder-image.png'} alt={item.name} />
+              <div className="card-body">
+                <h3 className="card-title">{item.name}</h3>
+                <p>Model: {item.model}</p>
+                <p>OS: {item.os.toUpperCase()}</p>
+                <div className="button-container">
+                  <button className="btn btn-orange" onClick={() => handleEditItem(item)}>Edit</button>
+                  <button className="btn btn-red" onClick={() => handleDeleteItem(item._id)}>Delete</button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
