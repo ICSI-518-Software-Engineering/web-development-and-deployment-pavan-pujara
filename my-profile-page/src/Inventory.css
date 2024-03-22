@@ -16,11 +16,6 @@ h1 {
   margin-bottom: 30px; /* Space below the search bar */
 }
 
-.form-control, .btn {
-  height: 45px; /* Increased height for better touch area and aesthetics */
-  margin-bottom: 15px; /* Space below each input/button */
-}
-
 .form-control {
   width: calc(100% - 20px); /* Adjust width to account for padding */
   padding: 10px;
@@ -65,46 +60,8 @@ h1 {
   color: white; /* change text color on hover if you like */
 }
 
-
-/* Styling for the add item form */
-.add-item-form {
-  display: flex;
-  flex-wrap: wrap; /* Wrap onto the next line if space runs out */
-  gap: 10px; /* Spacing between form elements */
-  margin-bottom: 30px; /* Space below the form */
-}
-
-/* Individual item card */
-.card {
-  margin-top: 30px; /* More space between cards */
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden; /* Ensures the child elements don't overflow */
-}
-
-.card-body {
-  padding: 25px; /* Increased padding inside cards */
-}
-
-.card-title {
-  font-size: 24px; /* Larger text for titles */
-  margin-bottom: 15px;
-}
-
-.card img {
-  width: 100%; /* Full width images */
-  height: auto; /* Keep aspect ratio */
-  margin-bottom: 15px; /* Space below the image */
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-start; /* Align buttons to the start of the container */
-  gap: 10px; /* Spacing between buttons */
-}
-
 /* Message when inventory is empty */
-.empty-inventory-message {
+.inventory-list {
   text-align: center;
   margin-top: 50px; /* Space above the message */
   font-style: italic;
