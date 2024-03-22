@@ -105,6 +105,7 @@ function App() {
         }/>
         <Route path="/addition" element={<AdditionPage />} />
         <Route path="/api" element={<Api />} />
+        <Route path="/inventory" element={<Inventory />} />
       </Routes>
     </div>
   );

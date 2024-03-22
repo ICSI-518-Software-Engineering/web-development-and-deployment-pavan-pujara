@@ -1,8 +1,5 @@
-/* Inventory.css */
-
-/* Overall layout styles */
-.inventory-container {
-  max-width: 800px;
+.container {
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -12,52 +9,69 @@ h1 {
   margin-bottom: 20px;
 }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.search-bar input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
   border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
-.search-bar button {
-  padding: 8px 16px;
-  margin-left: 10px;
-  background-color: #007bff;
-  color: #fff;
+.btn {
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.inventory-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 20px;
+.btn-blue {
+  background-color: #007bff;
+  color: #fff;
 }
 
-.inventory-item {
+.btn-green {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-orange {
+  background-color: orange;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.card {
+  margin-top: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px;
 }
 
-.inventory-item img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
-.inventory-item h3 {
-  margin: 0;
+.card img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
 
-.inventory-item p {
-  margin: 5px 0;
+.button-container {
+  margin-top: 20px;
 }

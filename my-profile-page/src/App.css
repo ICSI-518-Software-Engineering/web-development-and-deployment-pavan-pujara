@@ -50,7 +50,7 @@ body {
 }
 
 .name-display {
-  font-size: 3em; /* Increase the font size of the name */
+  font-size: 2.5em; /* Increase the font size of the name */
   align-items: center; /* Ensure vertical alignment */
   display: flex;
 }
