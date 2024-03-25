@@ -24,7 +24,7 @@ function App() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://ec2-18-118-105-153.us-east-2.compute.amazonaws.com:3001/items');
+      const response = await axios.get('http://ec2-18-220-113-151.us-east-2.compute.amazonaws.com:3001/items');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -48,13 +48,13 @@ function App() {
 
     try {
       if (editingId) {
-        await axios.put(`http://ec2-18-118-105-153.us-east-2.compute.amazonaws.com:3001/items/${editingId}`, formData, {
+        await axios.put(`http://ec2-18-220-113-151.us-east-2.compute.amazonaws.com:3001/items/${editingId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await axios.post('http://ec2-18-118-105-153.us-east-2.compute.amazonaws.com:3001/items', formData, {
+        await axios.post('http://ec2-18-220-113-151.us-east-2.compute.amazonaws.com:3001/items', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -72,7 +72,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://ec2-18-118-105-153.us-east-2.compute.amazonaws.com:3001/items/${id}`);
+      await axios.delete(`http://ec2-18-220-113-151.us-east-2.compute.amazonaws.com:3001/items/${id}`);
       await fetchItems(); // Refresh items
     } catch (error) {
       console.error('Error deleting item:', error);
