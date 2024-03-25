@@ -1,4 +1,3 @@
-import "./App.css";
 import React, { useState } from "react";
 import { Container, Navbar, Nav, Image, Button, FormControl } from "react-bootstrap";
 import { Link, Route, Routes } from "react-router-dom"; 
@@ -8,6 +7,7 @@ import navbarIcon from "./pp.png";
 import AdditionPage from "./Addition.js"; 
 import Api from './Api';
 import Inventory from './Inventory';
+import "./App.css";
 
 function App() {
   const [isEditing, setIsEditing] = useState(false);

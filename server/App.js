@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = 3001;
-const dbUrl = 'mongodb+srv://pavan:pavan14@assign.plzdlbv.mongodb.net/PavaData?retryWrites=true&w=majority&appName=assign'; // Adjust the database name as necessary
+const dbUrl = 'mongodb+srv://pavan:pavan14@assign.plzdlbv.mongodb.net/PavaData?retryWrites=true&w=majority&appName=assign';
 
 app.use(cors());
 app.use(express.json());
@@ -12,7 +12,8 @@ app.use(express.json());
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const itemSchema = new mongoose.Schema({
   name: String,
@@ -22,12 +23,17 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
-// Routes
+// Fetch all items
 app.get('/items', async (req, res) => {
-  const items = await Item.find();
-  res.json(items);
+  try {
+    const items = await Item.find();
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
+// Add a new item
 app.post('/items', async (req, res) => {
   const newItem = new Item(req.body);
   try {
@@ -38,27 +44,32 @@ app.post('/items', async (req, res) => {
   }
 });
 
-app.delete('/items/:id', async (req, res) => {
-  try {
-    await Item.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Item deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
+// Update an item
 app.put('/items/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, description, quantity } = req.body;
-
   try {
+    const { id } = req.params;
+    const { name, description, quantity } = req.body;
     const updatedItem = await Item.findByIdAndUpdate(id, { name, description, quantity }, { new: true });
+
     if (!updatedItem) {
-      return res.status(404).send('Item not found.');
+      return res.status(404).json({ message: 'Item not found' });
     }
     res.json(updatedItem);
   } catch (error) {
-    res.status(400).send('Error updating the item.');
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete an item
+app.delete('/items/:id', async (req, res) => {
+  try {
+    const item = await Item.findByIdAndDelete(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    res.json({ message: 'Item deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
