@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 3000; // Use environment variable for port or default to 3000
+const port = process.env.PORT || 3001; // Use environment variable for port or default to 3000
 
 // Enable CORS and JSON body parsing
 app.use(cors());
