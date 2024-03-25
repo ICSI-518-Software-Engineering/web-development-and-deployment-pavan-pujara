@@ -1,13 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 const PORT = 3001;
-const dbUrl = 'mongodb+srv://pavan:pavan14@assign.plzdlbv.mongodb.net/PavaData?retryWrites=true&w=majority&appName=assign';
+const dbUrl = 'mongodb+srv://pavan:pavan14@assign.plzdlbv.mongodb.net/PavaData?retryWrites=true&w=majority&appName=assign'; // It's a good practice to use environment variables for sensitive information
 
 app.use(cors());
 app.use(express.json());
+
+// Set up multer for storing uploaded files
+const storage = multer.memoryStorage(); // Stores files in memory
+const upload = multer({ storage: storage });
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
@@ -19,6 +24,7 @@ const itemSchema = new mongoose.Schema({
   name: String,
   description: String,
   quantity: Number,
+  image: String, // This will store the image as a base64 encoded string
 });
 
 const Item = mongoose.model('Item', itemSchema);
@@ -33,11 +39,24 @@ app.get('/items', async (req, res) => {
   }
 });
 
-// Add a new item
-app.post('/items', async (req, res) => {
-  const newItem = new Item(req.body);
+// Add a new item with an image
+app.post('/items', upload.single('image'), async (req, res) => {
+  const { name, description, quantity } = req.body;
+  let newItem = {
+    name,
+    description,
+    quantity,
+    image: ''
+  };
+
+  if (req.file) {
+    // Assuming the image is uploaded as 'image'
+    newItem.image = req.file.buffer.toString('base64');
+  }
+
   try {
-    const savedItem = await newItem.save();
+    const savedItem = new Item(newItem);
+    await savedItem.save();
     res.status(201).json(savedItem);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -45,11 +64,20 @@ app.post('/items', async (req, res) => {
 });
 
 // Update an item
-app.put('/items/:id', async (req, res) => {
+app.put('/items/:id', upload.single('image'), async (req, res) => {
+  const { name, description, quantity } = req.body;
+  let updateData = {
+    name,
+    description,
+    quantity
+  };
+
+  if (req.file) {
+    updateData.image = req.file.buffer.toString('base64');
+  }
+
   try {
-    const { id } = req.params;
-    const { name, description, quantity } = req.body;
-    const updatedItem = await Item.findByIdAndUpdate(id, { name, description, quantity }, { new: true });
+    const updatedItem = await Item.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
     if (!updatedItem) {
       return res.status(404).json({ message: 'Item not found' });
