@@ -4,49 +4,98 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ name: '', description: '', quantity: '' });
+  const [newItem, setNewItem] = useState({
+    name: '',
+    description: '',
+    quantity: '',
+    image: null, // Prepare for image file handling
+  });
   const [editingId, setEditingId] = useState(null); // Track which item is being edited
-  const [editFormData, setEditFormData] = useState({ name: '', description: '', quantity: '' });
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    description: '',
+    quantity: '',
+    image: null,
+  });
 
   useEffect(() => {
-    fetchItems();
+    fetchItems().catch(console.error);
   }, []);
 
   const fetchItems = async () => {
-    const response = await axios.get('http://localhost:3001/items');
-    setItems(response.data);
+    try {
+      const response = await axios.get('http://localhost:3001/items');
+      setItems(response.data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+      throw error; // Rethrow for useEffect catch
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      // Update item
-      await axios.put(`http://localhost:3001/items/${editingId}`, editFormData);
-      setEditingId(null); // Reset editing state
-    } else {
-      // Add new item
-      await axios.post('http://localhost:3001/items', newItem);
-      setNewItem({ name: '', description: '', quantity: '' }); // Reset form
+    const formData = new FormData();
+    formData.append('name', editingId ? editFormData.name : newItem.name);
+    formData.append('description', editingId ? editFormData.description : newItem.description);
+    formData.append('quantity', editingId ? editFormData.quantity.toString() : newItem.quantity.toString());
+
+    // Handle image if present
+    if (editingId && editFormData.image) {
+      formData.append('image', editFormData.image);
+    } else if (!editingId && newItem.image) {
+      formData.append('image', newItem.image);
     }
-    fetchItems(); // Refresh items
+
+    try {
+      if (editingId) {
+        await axios.put(`http://localhost:3001/items/${editingId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      } else {
+        await axios.post('http://localhost:3001/items', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      return; // Early return on error
+    }
+
+    setNewItem({ name: '', description: '', quantity: '', image: null }); // Reset form state
+    setEditingId(null); // Clear editing state
+    await fetchItems(); // Refresh items list
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:3001/items/${id}`);
-    fetchItems(); // Refresh items
+    try {
+      await axios.delete(`http://localhost:3001/items/${id}`);
+      await fetchItems(); // Refresh items
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
   const handleEdit = (item) => {
     setEditingId(item._id);
-    setEditFormData({ name: item.name, description: item.description, quantity: item.quantity });
+    setEditFormData({
+      name: item.name,
+      description: item.description,
+      quantity: item.quantity,
+      image: null, // Reset image field for editing
+    });
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+    const update = files ? { [name]: files[0] } : { [name]: value };
     if (editingId) {
-      setEditFormData({ ...editFormData, [name]: value });
+      setEditFormData({ ...editFormData, ...update });
     } else {
-      setNewItem({ ...newItem, [name]: value });
+      setNewItem({ ...newItem, ...update });
     }
   };
 
@@ -54,39 +103,18 @@ function App() {
     <div className="container mt-5">
       <div className="row">
         <div className="col-12">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                placeholder="Item Name"
-                value={editingId ? editFormData.name : newItem.name}
-                onChange={handleChange}
-                required
-              />
+              <input type="text" className="form-control" name="name" placeholder="Item Name" value={editingId ? editFormData.name : newItem.name} onChange={handleChange} required />
             </div>
             <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                name="description"
-                placeholder="Description"
-                value={editingId ? editFormData.description : newItem.description}
-                onChange={handleChange}
-                required
-              />
+              <input type="text" className="form-control" name="description" placeholder="Description" value={editingId ? editFormData.description : newItem.description} onChange={handleChange} required />
             </div>
             <div className="form-group">
-              <input
-                type="number"
-                className="form-control"
-                name="quantity"
-                placeholder="Quantity"
-                value={editingId ? editFormData.quantity : newItem.quantity}
-                onChange={handleChange}
-                required
-              />
+              <input type="number" className="form-control" name="quantity" placeholder="Quantity" value={editingId ? editFormData.quantity : newItem.quantity} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <input type="file" className="form-control" name="image" onChange={handleChange} />
             </div>
             <button type="submit" className="btn btn-primary">
               {editingId ? 'Update Item' : 'Add Item'}
@@ -102,9 +130,11 @@ function App() {
                 <h5 className="card-title">{item.name}</h5>
                 <h6 className="card-subtitle mb-2 text-muted">Quantity: {item.quantity}</h6>
                 <p className="card-text">{item.description}</p>
-                <button onClick={() => handleEdit(item)} className="btn btn-secondary">Edit</button>
-                <button onClick={() => handleDelete(item._id)} className="btn btn-danger">Delete</button>
+                {item.image && <img src={`data:image/jpeg;base64,${item.image}`} alt="Item"
+                style={{ width: '100px', height: '100px' }} />}
               </div>
+                <button onClick={() => handleEdit(item)} className="m-1 btn btn-secondary">Edit</button>
+                <button onClick={() => handleDelete(item._id)} className="m-1 btn btn-danger">Delete</button>
             </div>
           </div>
         ))}
@@ -114,3 +144,4 @@ function App() {
 }
 
 export default App;
+
