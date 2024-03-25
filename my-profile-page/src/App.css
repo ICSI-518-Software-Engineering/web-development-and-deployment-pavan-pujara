@@ -1,14 +1,12 @@
-/* App.css */
-
 body {
   background-color: black;
-  color: white; /* Set text color to white for better readability on black background */
+  color: white; 
 }
 
 .name-input,
 .description-textarea {
   background-color: white;
-  color: black; /* Set text color to black for better readability on white background */
+  color: black; 
 }
 
 .navbar-brand {
@@ -46,18 +44,18 @@ body {
 
 .name-display .edit-icon,
 .description-display .edit-icon {
-  margin-left: 13px; /* Adjust the space between the text and the edit icon as needed */
+  margin-left: 13px;
 }
 
 .name-display {
-  font-size: 2.5em; /* Increase the font size of the name */
-  align-items: center; /* Ensure vertical alignment */
+  font-size: 2.5em;
+  align-items: center;
   display: flex;
 }
 
 .description-display {
-  font-size: 1.5em; /* Increase the font size of the description */
-  align-items: center; /* Ensure vertical alignment */
+  font-size: 1.5em;
+  align-items: center;
   display: flex;
 }
 
@@ -67,38 +65,36 @@ body {
   margin-left: 5px;
 }
 
-/* App.css */
 .profile-container {
   display: flex;
-  align-items: center; /* This will vertically center your items */
-  justify-content: start; /* This aligns items to the start of the container */
+  align-items: center; 
+  justify-content: start;
   margin-top: 20px;
-  gap: 20px; /* Adds space between the image and text */
+  gap: 20px; 
 }
 
 .profile-pic {
-  /* Adjust width and height to fit a portrait rectangle */
-  width: auto; /* Adjust this value as needed */
-  height: 70%; /* Adjust this value as needed */
-  flex: 0 0 40%; /* Adjust the flex-basis if needed */
-  max-width: 40%; /* Adjust this value to maintain aspect ratio if needed */
-  border-radius: 10px; /* This will give the image rounded corners */
-  object-fit: cover; /* This will cover the area without stretching the image */
+  width: auto;
+  height: 70%;
+  flex: 0 0 40%; 
+  max-width: 40%;
+  border-radius: 10px;
+  object-fit: cover; 
 }
 
 .profile-details {
-  flex: 0 0 60%; /* This will make sure the name and description takes up the remaining 60% */
+  flex: 0 0 60%;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
   color: black;
-  opacity: 1; /* Firefox */
+  opacity: 1; 
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder { 
   color: black;
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
+::-ms-input-placeholder { 
   color: black;
 }

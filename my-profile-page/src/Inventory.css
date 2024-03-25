@@ -1,103 +1,23 @@
-.container {
-  max-width: 800px; /* Increased width for more space */
-  margin: 20px auto; /* Added more vertical margin */
-  padding: 40px; /* Increased padding for more space inside */
-  background-color: black; /* Add background color if needed */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
-  color: white;
+.inventory-container {
+  padding: 20px;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px; /* More space below the header */
+.inventory-form {
+  margin-bottom: 20px;
 }
 
-.search-bar {
-  margin-bottom: 30px; /* Space below the search bar */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
 }
 
-.form-control {
-  width: calc(100% - 20px); /* Adjust width to account for padding */
+.grid-item {
+  border: 1px solid #ccc;
   padding: 10px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px;
-  background-color: white; /* Make the background black */
-  color: black;
-  margin-right: 10px; /* Space between search input and button */
-  transition: background-color 0.3s;
+  border-radius: 5px;
 }
 
-.form-control::placeholder { /* Style the placeholder text */
-  color: grey;
-}
-
-.os {
-  cursor: pointer;
-  background-color: white;
-  color: black;
-  height: 50px;
-  width: 140px;
-  margin-left: 10px;
-  padding: 10px;
-  font-size: 18px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
-}
-
-select.os {
-  -webkit-appearance: none; /* Removes default chrome and safari style */
-  -moz-appearance: none; /* Removes default style Firefox */
-  appearance: none; /* Removes default style */
-  background: url('./path-to-down-arrow-icon.png') no-repeat right; /* Add custom arrow icon */
-  background-size: 25px; /* Size of the background image */
-  cursor: pointer;
-  font-size: 18px;
-  background-color: white;
-  color: black;
-  height: 49px;
-  width: 150px;
-  margin-left: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
-}
-
-/* Update the background position to leave some space on the right */
-select.os {
-  background-position: right 10px center;
-
-}
-
-.btn_search {
-  border: white;
-  background-color: rgb(45, 112, 255);
-  color: black;
-  font-size: 14px;
-  border-radius: 4px;
-  height: 4%;
-  width: 160px;
-  cursor: pointer;
-}
-
-.btn_add{
-  margin-bottom: 100px;
-  background-color: rgb(46, 252, 46);
-  color: black;
-  font-size: 14px;
-  border-radius: 4px;
-  height: 4%;
-  width: 160px;
-  cursor: pointer;
-  transition: background-color 0.2s; /* smooth transition for background color */
-}
-
-.btn_add:hover {
-  background-color: green; /* darker green on hover */
-  color: white; /* change text color on hover if you like */
-}
-
-/* Message when inventory is empty */
-.inventory-list {
-  text-align: center;
-  margin-top: 50px; /* Space above the message */
-  font-style: italic;
+.btn-submit {
+  margin-top: 10px;
 }
