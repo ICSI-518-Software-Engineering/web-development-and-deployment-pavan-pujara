@@ -1,84 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Inventory.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Inventory = () => {
-  const [inventoryItems, setInventoryItems] = useState([]);
-  const [editingItem, setEditingItem] = useState({ _id: '', name: '', quantity: '' });
+function App() {
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState({
+    name: '',
+    description: '',
+    quantity: '',
+  });
 
   useEffect(() => {
-    fetchInventoryItems();
+    fetchItems();
   }, []);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setEditingItem(prevState => ({ ...prevState, [name]: value }));
+  const fetchItems = async () => {
+    const response = await axios.get('http://localhost:3001/items');
+    setItems(response.data);
   };
 
-  const handleEditItem = (item) => {
-    setEditingItem(item);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post('http://localhost:3001/items', newItem);
+    setNewItem({ name: '', description: '', quantity: '' }); // Reset form
+    fetchItems(); // Refresh items
   };
 
-  const handleDeleteItem = async (id) => {
-    try {
-      await axios.delete(`/api/inventory/${id}`);
-      fetchInventoryItems();
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:3001/items/${id}`);
+    fetchItems(); // Refresh items
   };
 
-  const fetchInventoryItems = async () => {
-    try {
-      const response = await axios.get('/api/inventory');
-      setInventoryItems(response.data);
-    } catch (error) {
-      console.error('Error fetching inventory items:', error);
-    }
-  };
-
-  const handleItemSubmit = async (event) => {
-    event.preventDefault();
-    const method = editingItem._id ? 'put' : 'post';
-    const url = `/api/inventory${editingItem._id ? `/${editingItem._id}` : ''}`;
-
-    try {
-      await axios({
-        method,
-        url,
-        data: editingItem,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      fetchInventoryItems();
-      setEditingItem({ _id: '', name: '', quantity: '' }); // Clear form
-    } catch (error) {
-      console.error('Error submitting item:', error.response || error);
-    }
+  const handleChange = (e) => {
+    setNewItem({ ...newItem, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="inventory-container">
-      <h1>Inventory Management</h1>
-      <form onSubmit={handleItemSubmit} className="inventory-form">
-        <input type="text" name="name" placeholder="Item Name" value={editingItem.name} onChange={handleInputChange} required />
-        <input type="number" name="quantity" placeholder="Quantity" value={editingItem.quantity} onChange={handleInputChange} required />
-        <button type="submit" className="btn-submit">{editingItem._id ? 'Update Item' : 'Add Item'}</button>
-      </form>
-      <div className="inventory-grid">
-        {inventoryItems.length > 0 ? inventoryItems.map(item => (
-          <div key={item._id} className="grid-item">
-            <h3>{item.name}</h3>
-            <p>Quantity: {item.quantity}</p>
-            <button onClick={() => handleEditItem(item)}>Edit</button>
-            <button onClick={() => handleDeleteItem(item._id)}>Delete</button>
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-12">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                placeholder="Item Name"
+                value={newItem.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                className="form-control"
+                name="description"
+                placeholder="Description"
+                value={newItem.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="number"
+                className="form-control"
+                name="quantity"
+                placeholder="Quantity"
+                value={newItem.quantity}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">Add Item</button>
+          </form>
+        </div>
+      </div>
+      <div className="row mt-5">
+        {items.map((item) => (
+          <div key={item._id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">{item.name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">Quantity: {item.quantity}</h6>
+                <p className="card-text">{item.description}</p>
+                <button onClick={() => handleDelete(item._id)} className="btn btn-danger">Delete</button>
+              </div>
+            </div>
           </div>
-        )) : <p>No items in inventory.</p>}
+        ))}
       </div>
     </div>
   );
-};
+}
 
-export default Inventory;
+export default App;
