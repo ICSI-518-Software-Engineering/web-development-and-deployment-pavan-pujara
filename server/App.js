@@ -2,13 +2,32 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require('multer');
+const path = require('path'); // Add this line to import the path module
 
 const app = express();
 const PORT = 3001;
 const dbUrl = 'mongodb+srv://pavan:pavan14@assign.plzdlbv.mongodb.net/PavaData?retryWrites=true&w=majority&appName=assign'; // It's a good practice to use environment variables for sensitive information
 
 app.use(cors());
-app.use(express.json());
+app.use(express.static(path.join(__dirname, "build")));
+
+// Define a route for the addition API
+app.get('/Addition', (req, res) => {
+  // Get query parameters from URL (assuming num1 and num2 are passed)
+  const num1 = parseInt(req.query.num1);
+  const num2 = parseInt(req.query.num2);
+
+  // Check if num1 and num2 are not NaN
+  if (isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: "Both num1 and num2 must be valid numbers" });
+  }
+
+  // Perform addition
+  const result = num1 + num2;
+
+  // Send response with result
+  res.json({ result });
+});
 
 // Set up multer for storing uploaded files
 const storage = multer.memoryStorage(); // Stores files in memory
@@ -28,6 +47,10 @@ const itemSchema = new mongoose.Schema({
 });
 
 const Item = mongoose.model('Item', itemSchema);
+
+app.get('/', function (req, res) {
+  res.render('index', {});
+});
 
 // Fetch all items
 app.get('/items', async (req, res) => {
