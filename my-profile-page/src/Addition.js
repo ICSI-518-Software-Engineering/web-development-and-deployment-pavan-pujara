@@ -13,7 +13,7 @@ const AdditionPage = () => {
   const handleAddition = () => {
     const result = Number(num1) + Number(num2);
     setClientResult(result);
-    axios.get('http://localhost:3001/addition', {
+    axios.get(' /addition', {
       params: {
         num1: num1,
         num2: num2

@@ -24,7 +24,7 @@ function App() {
 
   const fetchItems = async () => {
     try { 
-      const response = await axios.get('http://localhost:3001/items');
+      const response = await axios.get(' /items');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -48,13 +48,13 @@ function App() {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/items/${editingId}`, formData, {
+        await axios.put(` /items/${editingId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await axios.post('http://localhost:3001/items', formData, {
+        await axios.post(' /items', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -72,7 +72,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/items/${id}`);
+      await axios.delete(` /items/${id}`);
       await fetchItems(); // Refresh items
     } catch (error) {
       console.error('Error deleting item:', error);

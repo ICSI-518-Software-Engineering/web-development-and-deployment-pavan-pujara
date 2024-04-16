@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Navbar, Nav, Image, Button, FormControl } from "react-bootstrap";
-import { Link, Route, Routes } from "react-router-dom"; 
+import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import profilePic from "./img/pp.jpg"; 
 import navbarIcon from "./img/pp.png"; 
@@ -9,16 +9,40 @@ import Api from './Api';
 import Inventory from './Inventory';
 import Signup from './sign_up.js';
 import Login from './login.js';
+import axios from 'axios';
 import "./App.css";
 
 function App() {
-  // Assume isLoggedIn state indicates whether the user is logged in
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("Pavan Pujara");
   const [description, setDescription] = useState("Hey, How yo doin? ;-)");
   const [tempName, setTempName] = useState(name);
   const [tempDescription, setTempDescription] = useState(description);
+  const [user, setUser] = useState({ username: "", avatar: navbarIcon }); // Default user data
+
+  useEffect(() => {
+    // Function to check if the user is authenticated, but only when the user navigates to the root URL.
+    if (location.pathname === '/') {
+      const checkAuth = async () => {
+        try {
+          const response = await axios.get(' /getUserData', { withCredentials: true });
+          if (response.data.username) {
+            setIsLoggedIn(true);
+            setUser({ username: response.data.username, avatar: response.data.avatar || navbarIcon });
+          } else {
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          console.error('Authentication check failed', error);
+          setIsLoggedIn(false);
+        }
+      };
+      checkAuth();
+    }
+  }, [location.pathname]); // Dependency on location.pathname
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -36,43 +60,52 @@ function App() {
     setIsEditing(false);
   };
 
-  const handleLogout = () => {
-    // Perform logout actions here
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(' /logout', {}, { withCredentials: true });
+      if (response.status === 200) {
+        setIsLoggedIn(false);
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
   };
 
   return (
     <div>
-      <Navbar bg="light" expand="lg">
-  <Navbar.Brand className="navbar-brand">
-    <Link to="/">
-      <img src={navbarIcon} alt="Icon" width='50px' style={{ margin: '10px' }} />
-    </Link>
-  </Navbar.Brand>
-  <Nav className="mr-auto" style={{ marginRight: 'auto' }}>
-    <Link to="/" className="nav-link">Profile</Link>
-    <Link to="/addition" className="nav-link">Addition</Link>
-    <Link to="/api" className="nav-link">API</Link>
-    <Link to="/inventory" className="nav-link">Inventory</Link>
-  </Nav>
-  {isLoggedIn ? (
-    // If logged in, show user image and logout button on the right
-    <Nav className="ml-auto">
-      <Image src={profilePic} className="profile-pic" />
-      <Button variant="danger" className="ml-2" onClick={handleLogout}>Logout</Button>
-    </Nav>
-  ) : (
-    // If not logged in, show login and sign up buttons on the right
-    <Nav className="ml-auto">
-      <Link to="/login">
-      <Button variant="primary" className="mr-2">Login</Button>
-      </Link>
-      <Link to="/sign-up">
-        <Button variant="secondary">Sign Up</Button>
-      </Link>
-    </Nav>
-  )}
-</Navbar>
+      <Navbar bg="light" expand="lg" className="py-2 shadow-sm"> {/* Added shadow for depth and increased padding */}
+      <Navbar.Brand>
+        <Link to="/">
+          <img src={navbarIcon} alt="Icon" style={{ width: '40px' }} /> {/* Reduced size for aesthetics */}
+        </Link>
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" /> {/* Ensures navbar is responsive */}
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Link to="/" className="nav-link">Profile</Link>
+          <Link to="/addition" className="nav-link">Addition</Link>
+          <Link to="/api" className="nav-link">API</Link>
+          <Link to="/inventory" className="nav-link">Inventory</Link>
+        </Nav>
+        {isLoggedIn ? (
+          <Nav className="ml-auto align-items-center"> {/* Added alignment for items */}
+            <span className="nav-link">Welcome, {user.username}</span>
+            <Image className=" m-2" src={`data:image/jpeg;base64,${user.avatar}`|| navbarIcon} roundedCircle style={{ width: '40px', height: '40px' }} />
+            <Button variant="outline-danger" className="ml-2" onClick={handleLogout}>Logout</Button>
+          </Nav>
+        ) : (
+          <Nav className="ml-auto">
+            <Link to="/login" className="nav-link">
+              <Button variant="outline-primary">Login</Button>
+            </Link>
+            <Link to="/sign-up" className="nav-link">
+              <Button variant="outline-secondary">Sign Up</Button>
+            </Link>
+          </Nav>
+        )}
+      </Navbar.Collapse>
+    </Navbar>
 
       <Routes>
         <Route exact path="/" element={

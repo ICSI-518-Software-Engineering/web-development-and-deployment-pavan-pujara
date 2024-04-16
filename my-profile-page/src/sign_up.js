@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Logo from './img/pp.png';
 import './sign-up.css';
 
-const SignUp = () => { 
+const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [avatar, setAvatar] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const getIsAuthenticated = useCallback(async () => {
+    try {
+        const res = await axios.get(" /getUserData", { withCredentials: true });
+        console.log(res);
+        navigate('/');
+    } catch (error) {
+        console.log(error);
+    }
+}, [navigate]);
+
+useEffect(() => {
+    getIsAuthenticated();
+}, [getIsAuthenticated]);
+
 
   const validateUsername = (username) => {
     return /^[a-zA-Z0-9_]+$/.test(username);
@@ -17,28 +33,37 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!validateUsername(username)) {
-      setError('Username can only contain letters, numbers, and underscores.');
+      setError('Username can only contain letters, numbers, and underscores "_".');
+      setIsLoading(false);
       return;
     }
 
     try {
       const formData = new FormData();
-      formData.append('username', username);
+      formData.append('username', username.toLowerCase());
       formData.append('password', password);
       formData.append('avatar', avatar);
 
-      const response = await axios.post('http://localhost:3001/sign_up', formData, {
+      const response = await axios.post(' /sign_up', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true // Ensure cookies are sent with the request to handle session automatically
       });
-
-      // Redirect to home page on successful sign up
-      navigate('/home');
+      
+      // Redirect to the home page or dashboard on successful sign up
+      if (response.status === 201) {
+        navigate('/'); // Redirect user to home page after successful sign up and automatic login
+      } else {
+        throw new Error('Signup failed'); // Throw if status code is not 201, indicating unsuccessful signup
+      }
     } catch (err) {
-      setError('Invalid username or username already exists');
+      setError(err.response?.data?.message || 'An error occurred during sign up.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,7 +74,7 @@ const SignUp = () => {
   return (
     <div className="login-container">
       <img src={Logo} alt="Logo" className="logo" />
-      <h2>Sign up</h2>
+      <h2>Sign Up</h2>
       <h5>and get one step closer to getting connected with me. :)</h5>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit} className="login-form">
@@ -65,10 +90,12 @@ const SignUp = () => {
           <label>Avatar</label>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
         </div>
-        <button type="submit" className="login-button">Welcome to my squad</button>
+        <button type="submit" className="login-button" disabled={isLoading}>
+          {isLoading ? 'Signing Up...' : 'Sign Up'}
+        </button>
       </form>
     </div>
   );
 };
 
-export default SignUp; // Also changed here
+export default SignUp;

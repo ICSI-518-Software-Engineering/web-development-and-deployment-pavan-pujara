@@ -54,3 +54,24 @@
     color: red;
     margin-bottom: 10px;
 }
+
+
+
+::file-selector-button{
+  --color: #e75480;
+  --hover: #000000;
+  border: none;
+  background: white;
+  color: var(--color);
+  transition: 1.3s;
+  &:hover,
+  &:focus { 
+    border-color: var(--hover);
+    color: white;
+  }
+}
+
+::file-selector-button:hover,
+::file-selector-button:focus {
+  box-shadow: inset 10rem 0 0 0 var(--hover);
+}
