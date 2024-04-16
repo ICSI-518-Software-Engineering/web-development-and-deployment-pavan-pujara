@@ -9,7 +9,9 @@ import Api from './Api';
 import Inventory from './Inventory';
 import Signup from './sign_up.js';
 import Login from './login.js';
+import Profile from './Profile'; 
 import axios from 'axios';
+import RequireAuth from './RequireAuth';
 import "./App.css";
 
 function App() {
@@ -28,7 +30,7 @@ function App() {
     if (location.pathname === '/') {
       const checkAuth = async () => {
         try {
-          const response = await axios.get(' /getUserData', { withCredentials: true });
+          const response = await axios.get('/getUserData', { withCredentials: true });
           if (response.data.username) {
             setIsLoggedIn(true);
             setUser({ username: response.data.username, avatar: response.data.avatar || navbarIcon });
@@ -90,6 +92,7 @@ function App() {
         </Nav>
         {isLoggedIn ? (
           <Nav className="ml-auto align-items-center"> {/* Added alignment for items */}
+            <Link to="/profile" className="nav-link">User Profile</Link>
             <span className="nav-link">Welcome, {user.username}</span>
             <Image className=" m-2" src={`data:image/jpeg;base64,${user.avatar}`|| navbarIcon} roundedCircle style={{ width: '40px', height: '40px' }} />
             <Button variant="outline-danger" className="ml-2" onClick={handleLogout}>Logout</Button>
@@ -108,7 +111,7 @@ function App() {
     </Navbar>
 
       <Routes>
-        <Route exact path="/" element={
+        <Route exact path="/" element={<RequireAuth>
           <Container className="mt-5 d-flex profile-container">
             <Image src={profilePic} className="profile-pic" />
             <div className="profile-details">
@@ -161,10 +164,13 @@ function App() {
               )}
             </div>
           </Container>
+          </RequireAuth>
         }/>
-        <Route path="/addition" element={<AdditionPage />} />
-        <Route path="/api" element={<Api />} />
-        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/addition" element={<RequireAuth><AdditionPage /></RequireAuth>} />
+        <Route path="/api" element={<RequireAuth><Api /></RequireAuth>} />
+        <Route path="/inventory" element={<RequireAuth><Inventory /></RequireAuth>} />
+        <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+        {/* <Route path="/profile" element={<Profile />} />  */}
         <Route path="/sign-up" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
