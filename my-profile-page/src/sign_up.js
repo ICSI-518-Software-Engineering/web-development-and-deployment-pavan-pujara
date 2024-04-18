@@ -14,7 +14,7 @@ const SignUp = () => {
 
   const getIsAuthenticated = useCallback(async () => {
     try {
-        const res = await axios.get(" /getUserData", { withCredentials: true });
+        const res = await axios.get("  /getUserData", { withCredentials: true });
         console.log(res);
         navigate('/');
     } catch (error) {
@@ -47,7 +47,7 @@ useEffect(() => {
       formData.append('password', password);
       formData.append('avatar', avatar);
 
-      const response = await axios.post(' /sign_up', formData, {
+      const response = await axios.post('/sign_up', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

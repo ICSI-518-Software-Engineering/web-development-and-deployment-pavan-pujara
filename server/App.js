@@ -25,19 +25,10 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // Middleware setup
-app.use(cors({
-  origin: ['http://ec2-18-217-240-117.us-east-2.compute.amazonaws.com:3001'], // Adjust this to match your client-side URL
-  credentials: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
-}));
+app.use(cors());
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-// app.use(Session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false
-// }));
 
 const store = new MongoDBStore({
   uri: process.env.MY_DataBase_URI,

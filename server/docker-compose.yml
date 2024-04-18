@@ -1,17 +1,17 @@
 version: '3.1'
 services:
-  server:
+  node_app:
     build: .
     container_name: server
     environment:
       NODE_ENV : production
-      MY_DataBase_URI: mongodb://mongodb:27017/MyDataBase
+      MY_DataBase_URI: mongodb://datebase:27017/MyDataBase
       SESSION_SECRET: donttellanyone
       PORT: 3001
     restart: always
     depends_on:
       - mongodb
-  mongodb:
+  database:
     image: mongo
     container_name: mongodb
     restart: always
@@ -27,5 +27,3 @@ services:
       - "80:80"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./caddy_data:/data
-      - ./caddy_config:/config
