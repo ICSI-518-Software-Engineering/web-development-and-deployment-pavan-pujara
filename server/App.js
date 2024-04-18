@@ -26,7 +26,7 @@ const User = mongoose.model('User', userSchema);
 
 // Middleware setup
 app.use(cors());
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static("build"));
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
