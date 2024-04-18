@@ -26,7 +26,7 @@ const User = mongoose.model('User', userSchema);
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000'], // Adjust this to match your client-side URL
+  origin: ['http://ec2-13-58-15-53.us-east-2.compute.amazonaws.com:3000'], // Adjust this to match your client-side URL
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
 }));
