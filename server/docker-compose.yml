@@ -10,7 +10,8 @@ services:
       PORT: 3001
     restart: always
     depends_on:
-      - mongodb
+      - database
+      - caddy
   database:
     image: mongo
     container_name: mongodb
