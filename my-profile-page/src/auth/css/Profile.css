@@ -1,0 +1,23 @@
+.profile-container {
+    height: 100vh;
+}
+
+.profile-image-container {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.profile-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-username {
+    font-size: 24px;
+    margin-top: 20px;
+}

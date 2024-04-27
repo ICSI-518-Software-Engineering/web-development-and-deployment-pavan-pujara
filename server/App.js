@@ -10,8 +10,6 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 
-
-
 const app   = express();
 const PORT  = process.env.PORT || 3001;
 const dbUrl = process.env.MY_DataBase_URI;
@@ -25,7 +23,10 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // Middleware setup
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.static("build"));
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
